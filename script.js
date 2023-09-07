@@ -22,7 +22,7 @@
                 document.getElementById('coe').textContent = 'Error';
             });
         function checkBlynkStatus(authToken, statusElement) {
-                fetch(`https://blynk-cloud.com/${authToken}/isAppConnected`)
+                fetch(`https://blynk.cloud/external/api/isHardwareConnected?token=${authToken}`)
                     .then(response => response.json())
                     .then(data => {
                         const isOnline = data === 1; // Blynk responds with 1 for online, 0 for offline
