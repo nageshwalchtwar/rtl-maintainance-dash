@@ -22,18 +22,18 @@
                 document.getElementById('coe').textContent = 'Error';
             });
         function checkBlynkStatus(authToken, statusElement) {
-            fetch(`https://blynk-cloud.com/${authToken}/isAppConnected`)
-                .then(response => response.json())
-                .then(data => {
-                    const isOnline = data === 1;
-                    statusElement.textContent = isOnline ? 'Online' : 'Offline';
-                    statusElement.classList.toggle('offline', !isOnline);
-                })
-                .catch(error => {
-                    statusElement.textContent = 'Error';
-                    statusElement.classList.add('offline');
-                });
-        }
+                fetch(`https://blynk-cloud.com/${authToken}/isAppConnected`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const isOnline = data === 1; // Blynk responds with 1 for online, 0 for offline
+                        statusElement.textContent = isOnline ? 'Online' : 'Offline';
+                        statusElement.style.color = isOnline ? 'green' : 'red';
+                    })
+                    .catch(error => {
+                        statusElement.textContent = 'Error';
+                        statusElement.style.color = 'red';
+                    });
+            }
         setInterval(function() {
             // Update status for Vanishing Rod Experiment
             fetchAndUpdateStatus('https://raw.githubusercontent.com/nageshwalchtwar/selenium_automated_cron/main/data.json', 
