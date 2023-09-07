@@ -124,7 +124,24 @@
         </div>
         <!-- Add more status boxes as needed -->
     </div>
-    
+    <script>
+            function checkBlynkStatus(authToken, statusElement) {
+            fetch(`https://blynk.cloud/external/api/isHardwareConnected?token=${authToken}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const isOnline = data === true; // Blynk responds with 1 for online, 0 for offline
+                        statusElement.textContent = isOnline ? 'Online' : 'Offline';
+                        statusElement.style.color = isOnline ? 'green' : 'red';
+                    })
+                    .catch(error => {
+                        statusElement.textContent = 'Error';
+                        statusElement.style.color = 'red';
+                    });
+            };
+
+            checkBlynkStatus('ih9WueVjBqXegKg2efGtVqUVdFRQdhJa', document.getElementById('COE'));
+            checkBlynkStatus('vTZNEt9WyE--pOBu6LmH_QMAkoEcC4hd', document.getElementById('VR'));
+    </script>
   <script src="script.js">Javscript.</script>
 </body>
 </html>
