@@ -53,6 +53,45 @@
             flex: 1;
             margin: 0 10px;
         }
+                .status-box {
+            background-color: rgb(159, 201, 228);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            margin: 0 10px;
+        }
+        .status-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+        
+        .experiment {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .experiment-name {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .status {
+            font-size: 18px;
+            color: #007f00; /* Green for online */
+        }
+        .status.offline {
+            color: #ff0000; /* Red for offline */
+        }
     </style>
 </head>
 <body>
@@ -69,11 +108,19 @@
             <h2>Vanishing Rod Experiment</h2>
             <p>Status: <span id="vr">Loading...</span></p>
             <p>Last updated : <span id="timestampVR">Getting ...</span></p>
+        <div class="experiment">
+                <div class="experiment-name">Blynk VR</div>
+                <div class="status" id="statusExp1">Loading...</div>
+        </div>
         </div>
         <div class="status-box">
             <h2>Conservation of Mechanical Energy</h2>
             <p>Status: <span id="coe">Loading...</span></p>
             <p>Last updated : <span id="timestampCOE">Getting ...</span></p>
+        <div class="experiment">
+                <div class="experiment-name">Blynk COE</div>
+                <div class="status" id="statusExp1">Loading...</div>
+        </div>
         </div>
         <!-- Add more status boxes as needed -->
     </div>
