@@ -25,7 +25,7 @@
                 fetch(`https://blynk.cloud/external/api/isHardwareConnected?token=${authToken}`)
                     .then(response => response.json())
                     .then(data => {
-                        const isOnline = data === "true"; // Blynk responds with 1 for online, 0 for offline
+                        const isOnline = data === true; // Blynk responds with 1 for online, 0 for offline
                         statusElement.textContent = isOnline ? 'Online' : 'Offline';
                         statusElement.style.color = isOnline ? 'green' : 'red';
                     })
