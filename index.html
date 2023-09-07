@@ -105,6 +105,19 @@
             .catch(error => {
                 document.getElementById('coe').textContent = 'Error';
             });
+        setInterval(function() {
+            // Update status for Vanishing Rod Experiment
+            fetchAndUpdateStatus('https://raw.githubusercontent.com/nageshwalchtwar/selenium_automated_cron/main/data.json', 
+                                 document.getElementById('vr'), 
+                                 document.getElementById('timestampVR'));
+            
+            // Update status for Conservation of Mechanical Energy
+            fetchAndUpdateStatus('https://raw.githubusercontent.com/nageshwalchtwar/selenium_cron_coe/main/data.json', 
+                                 document.getElementById('coe'), 
+                                 document.getElementById('timestampCOE'));
+            
+            // You can add more websites and status elements here
+        }, 5000);
     </script>
 </body>
 </html>
