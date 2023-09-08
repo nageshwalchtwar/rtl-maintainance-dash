@@ -9,6 +9,8 @@
             })
             .catch(error => {
                 document.getElementById('vr').textContent = 'Error';
+                document.getElementById('vr').style.color = "red";
+                    
             });
 
         // Example: Fetch status for Website 2
@@ -16,11 +18,13 @@
             .then(response => response.json())
             .then(data1 => {
                 document.getElementById('coe').textContent = data1.value;
+                document.getElementById('coe').style.color = "green";
                 const timestampCOE = new Date().toLocaleString(); 
                 document.getElementById("timestampCOE").textContent=timestampCOE;
             })
             .catch(error => {
                 document.getElementById('coe').textContent = 'Error';
+                document.getElementById('coe').style.color = "red";
             });
         function checkBlynkStatus(authToken, statusElement) {
                 fetch(`https://blynk.cloud/external/api/isHardwareConnected?token=${authToken}`)
