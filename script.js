@@ -3,7 +3,7 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('vr').textContent = data.value;
-                document.getElementById('vr').text.color = "green";
+                document.getElementById('vr').style.color = "green";
                 const timestampVR = new Date().toLocaleString(); // Get the current date and time
                 document.getElementById("timestampVR").textContent=timestampVR;
             })
