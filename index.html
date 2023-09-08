@@ -110,45 +110,41 @@
             <h2>Vanishing Rod Experiment</h2>
             <p>Status: <span id="vr-status">Loading...</span></p>
             <p>Last updated: <span id="vr-timestamp">Getting ...</span></p>
-            <!-- Placeholder for the VR status graph -->
-            <div class="experiment-name">Blynk VR Status</div>
+
             <div class="status-graph" id="vr-graph"></div>
         </div>
         <div class="status-box">
             <h2>Conservation of Mechanical Energy</h2>
             <p>Status: <span id="coe-status">Loading...</span></p>
             <p>Last updated: <span id="coe-timestamp">Getting ...</span></p>
-            <!-- Placeholder for the COE status graph -->
-            <div class="experiment-name">Blynk COE Status</div>
+
             <div class="status-graph" id="coe-graph"></div>
         </div>
         <div class="status-box">
             <h2>Focal Length</h2>
             <p>Status: <span id="fl-status">Script under test</span></p>
             <p>Last updated: <span id="fl-timestamp">Script under test</span></p>
-            <!-- Placeholder for the FL status graph -->
-            <div class="experiment-name">Blynk FL Status</div>
             <div class="status-graph" id="fl-graph"></div>
         </div>
         <!-- Add more status boxes as needed -->
     </div>
     <script>
         // Function to create/update the status graph
-        function createOrUpdateStatusGraph(data, graphElement, experimentName) {
-            // Create or update the graph using Plotly
-            const trace = {
-                x: data.x, // X-axis data (timestamps)
-                y: data.y, // Y-axis data (online/offline values)
-                type: 'scatter',
-                mode: 'lines+markers',
-                name: experimentName,
-            };
+function createOrUpdateGraph(data, graphElement, experimentName) {
+    // Create or update the graph using Plotly
+    const trace = {
+        x: data.x, // X-axis data (timestamps)
+        y: data.y, // Y-axis data (online/offline values)
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: experimentName,
+    };
 
-            const layout = {
-                title: `${experimentName} Online/Offline Status`,
-                xaxis: { title: 'Timestamp' },
-                yaxis: { title: 'Status' },
-            };
+    const layout = {
+        title: `${experimentName} Online/Offline Status`,
+        xaxis: { title: 'Timestamp' },
+        yaxis: { title: 'Status' },
+    };
 
             const graphData = [trace];
 
