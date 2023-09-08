@@ -3,7 +3,14 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('vr').textContent = data.value;
+          
+                if(data.value == "Working"){
+                        
                 document.getElementById('vr').style.color = "green";
+                }
+                else{
+                document.getElementById('vr').style.color = "red";
+                }
                 const timestampVR = new Date().toLocaleString(); // Get the current date and time
                 document.getElementById("timestampVR").textContent=timestampVR;
             })
@@ -18,7 +25,14 @@
             .then(response => response.json())
             .then(data1 => {
                 document.getElementById('coe').textContent = data1.value;
-                document.getElementById('coe').style.color = "green";
+                if(data1.value == "Working"){
+                        
+                        document.getElementById('coe').style.color = "green";
+                }
+                else{
+                document.getElementById('coe').style.color = "red";
+                }
+                // document.getElementById('coe').style.color = "green";
                 const timestampCOE = new Date().toLocaleString(); 
                 document.getElementById("timestampCOE").textContent=timestampCOE;
             })
