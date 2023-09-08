@@ -1,4 +1,207 @@
+<!-- test code for graph  -->
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="10" />
+    <title>RTL - Experiment Status</title>
+    <!-- Include Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        
+        #status-bar {
+            background-color: #18070e;
+            color: white;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #status-bar h1 {
+            margin: 0;
+        }
+        
+        #buttons {
+            margin: 20px;
+        }
+        
+        #buttons button {
+            background-color: #0f57f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        #content {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        
+        .status-box {
+            background-color: rgb(159, 201, 228);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            margin: 0 10px;
+        }
+        
+        .status-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+        
+        .experiment {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .experiment-name {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .status {
+            font-size: 18px;
+            color: #007f00; /* Green for online */
+        }
+        .status.offline {
+            color: #ff0000; /* Red for offline */
+        }
+        
+        /* Style for the status graph */
+        .status-graph {
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="status-bar">
+        <h1>Remote Labs - Maintenance Dashboard</h1>
+        <div id="buttons">
+            <button onclick="window.location.href='https://remote-labs.in'">Remote Labs</button>
+            <button onclick="window.location.href='https://spcrc.iiit.ac.in'">SPCRC</button>
+            <!-- Add more buttons as needed -->
+        </div>
+    </div>
+    <div id="content">
+        <div class="status-box">
+            <h2>Vanishing Rod Experiment</h2>
+            <p>Status: <span id="vr-status">Loading...</span></p>
+            <p>Last updated: <span id="vr-timestamp">Getting ...</span></p>
+            <!-- Placeholder for the VR status graph -->
+            <div class="experiment-name">Blynk VR Status</div>
+            <div class="status-graph" id="vr-graph"></div>
+        </div>
+        <div class="status-box">
+            <h2>Conservation of Mechanical Energy</h2>
+            <p>Status: <span id="coe-status">Loading...</span></p>
+            <p>Last updated: <span id="coe-timestamp">Getting ...</span></p>
+            <!-- Placeholder for the COE status graph -->
+            <div class="experiment-name">Blynk COE Status</div>
+            <div class="status-graph" id="coe-graph"></div>
+        </div>
+        <div class="status-box">
+            <h2>Focal Length</h2>
+            <p>Status: <span id="fl-status">Script under test</span></p>
+            <p>Last updated: <span id="fl-timestamp">Script under test</span></p>
+            <!-- Placeholder for the FL status graph -->
+            <div class="experiment-name">Blynk FL Status</div>
+            <div class="status-graph" id="fl-graph"></div>
+        </div>
+        <!-- Add more status boxes as needed -->
+    </div>
+    <script>
+        // Function to create/update the status graph
+        function createOrUpdateStatusGraph(data, graphElement, experimentName) {
+            // Create or update the graph using Plotly
+            const trace = {
+                x: data.x, // X-axis data (timestamps)
+                y: data.y, // Y-axis data (online/offline values)
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: experimentName,
+            };
+
+            const layout = {
+                title: `${experimentName} Online/Offline Status`,
+                xaxis: { title: 'Timestamp' },
+                yaxis: { title: 'Status' },
+            };
+
+            const graphData = [trace];
+
+            Plotly.newPlot(graphElement, graphData, layout);
+
+            // Set a threshold for offline status (e.g., 'Offline')
+            const offlineThreshold = 'Offline';
+
+            // Check if the latest status is offline and display it as a horizontal line
+            if (data.y[data.y.length - 1] === offlineThreshold) {
+                Plotly.addTraces(graphElement, {
+                    x: data.x,
+                    y: [offlineThreshold], // Create a horizontal line
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'Offline',
+                    line: { color: 'red' },
+                });
+            }
+        }
+
+        // Example data (replace with your actual data)
+        const vrStatusData = {
+            x: ['Timestamp1', 'Timestamp2', 'Timestamp3'],
+            y: ['Online', 'Offline', 'Online'],
+        };
+
+        const coeStatusData = {
+            x: ['Timestamp1', 'Timestamp2', 'Timestamp3'],
+            y: ['Online', 'Online', 'Offline'],
+        };
+
+        const flStatusData = {
+            x: ['Timestamp1', 'Timestamp2', 'Timestamp3'],
+            y: ['Offline', 'Offline', 'Offline'],
+        };
+
+        // Create or update the status graphs
+        createOrUpdateStatusGraph(vrStatusData, document.getElementById('vr-graph'), 'Blynk VR');
+        createOrUpdateStatusGraph(coeStatusData, document.getElementById('coe-graph'), 'Blynk COE');
+        createOrUpdateStatusGraph(flStatusData, document.getElementById('fl-graph'), 'Blynk FL');
+    </script>
+</body>
+</html>
+
+
+<!--test graph end  -->
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -156,3 +359,4 @@
   <script src="script.js">Javscript.</script>
 </body>
 </html>
+ -->
