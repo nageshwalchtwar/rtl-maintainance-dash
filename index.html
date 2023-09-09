@@ -152,7 +152,7 @@
                         statusElement.textContent = 'Error';
                         statusElement.style.color = 'red';
                     });
-            fetch(`https://blynk.cloud/external/api/isHardwareConnected?token=${authToken}&v3`)
+            fetch(`https://blr1.blynk.cloud/external/api/get?token=${authToken}&v3`)
                     .then(response => response.json())
                     .then(data => {
                         const isUse = data === 1; // Blynk responds with 1 for online, 0 for offline
