@@ -173,7 +173,6 @@
               console.error('Logout failed:', error);
             });
         });
-    <script>
             function checkBlynkStatus(authToken, statusElement,useEle) {
             fetch(`https://blynk.cloud/external/api/isHardwareConnected?token=${authToken}`)
                     .then(response => response.json())
