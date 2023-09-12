@@ -55,7 +55,23 @@
             }
     // Function to fetch and update status for an experiment
 
+  // Function to trigger CSV file download
+  function downloadCSV() {
+    // Specify the URL of the CSV file
+    const csvFileUrl = 'https://drive.google.com/file/d/1asn3gWOec1sm-xh6S-EZe-HRJnBl7T7B/view?usp=drive_link';
 
+    // Create a download link element
+    const a = document.createElement("a");
+    a.href = csvFileUrl;
+    a.download = "status.csv"; // Specify the file name for the CSV
+    
+    // Trigger a click event to initiate the download
+    a.click();
+  }
+
+  // Add a click event listener to the download button
+  const downloadCsvButton = document.getElementById('downloadCsvButton');
+  downloadCsvButton.addEventListener('click', downloadCSV);
         setInterval(function() {
             // Update status for Vanishing Rod Experiment
             fetchAndUpdateStatus('https://raw.githubusercontent.com/nageshwalchtwar/selenium_automated_cron/main/data.json', 
