@@ -20,6 +20,20 @@
                     
             });
 
+        fetch('https://raw.githubusercontent.com/nageshwalchtwar/selenium_automated_cron/main/latency.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('vrlat').textContent = data.latency;
+          
+                        
+                document.getElementById('vrlat').style.color = "green";
+            })
+            .catch(error => {
+                document.getElementById('vrlat').textContent = 'Error';
+                    
+            });
+
+
         // Example: Fetch status for Website 2
         fetch('https://raw.githubusercontent.com/nageshwalchtwar/selenium_cron_coe/main/data.json')
             .then(response => response.json())
