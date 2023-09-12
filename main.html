@@ -101,6 +101,7 @@
         <div id="buttons">
             <button onclick="window.location.href='https://remote-labs.in'">Remote Labs</button>
             <button onclick="window.location.href='https://spcrc.iiit.ac.in'">SPCRC</button>
+            <button id="logoutButton">Logout</button>
             <!-- Add more buttons as needed -->
         </div>
     </div>
@@ -139,6 +140,39 @@
         </div>
         <!-- Add more status boxes as needed -->
     </div>
+    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-auth-compat.js"></script>
+    <script>
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBgjYSKB61M4j9uh4B1RnUGBz9-hZ8PkJI",
+            authDomain: "blynk-usage.firebaseapp.com",
+            projectId: "blynk-usage",
+            storageBucket: "blynk-usage.appspot.com",
+            messagingSenderId: "327474116131",
+            appId: "1:327474116131:web:35d80801a33dd3d432a396",
+            measurementId: "G-PV5CQF67H2"
+          };
+          
+        
+        firebase.initializeApp(firebaseConfig);
+        
+        // Get a reference to the logout button
+        const logoutButton = document.getElementById('logoutButton');
+        
+        // Add a click event listener to the logout button
+        logoutButton.addEventListener('click', () => {
+          // Sign the user out
+          firebase.auth().signOut()
+            .then(() => {
+              alert('Logout successful!');
+              // Redirect to the login page or perform other actions as needed
+              window.location.href = 'login.html'; // Replace 'login.html' with your login page URL
+            })
+            .catch((error) => {
+              console.error('Logout failed:', error);
+            });
+        });
     <script>
             function checkBlynkStatus(authToken, statusElement,useEle) {
             fetch(`https://blynk.cloud/external/api/isHardwareConnected?token=${authToken}`)
