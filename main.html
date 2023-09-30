@@ -108,7 +108,14 @@
     <div id="status-bar">
         <h1>Remote Labs - Maintainance Dashboard</h1>
         <div id="buttons">
-            <button onclick="window.location.href='plotCOE.html'">Plots</button>
+        <select name="language" id="buttons">
+          <option <button onclick="window.location.href='plotCOE.html'">COE plot</button>
+          </option>
+          <option <button onclick="window.location.href='plotVR.html'">VR plot</button>
+          </option>
+          <option <button onclick="window.location.href='plotFL.html'">FL plot</button>
+          </option>
+        </select>
             <button onclick="window.location.href='https://remote-labs.in'">Remote Labs</button>
             <button onclick="window.location.href='https://spcrc.iiit.ac.in'">SPCRC</button>
             <button id="downloadCsvButton">status CSV</button>
