@@ -26,8 +26,7 @@ jobs:
     - name: Generate plot
       run: |
         python experiment_plot.py
-      env:
-        ONEDRIVE_LINK: ${{ secrets.ONEDRIVE_LINK }}
+      
     
     - name: Commit and push if changed
       run: |
