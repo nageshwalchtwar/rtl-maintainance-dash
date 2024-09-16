@@ -5,6 +5,7 @@ from datetime import datetime
 import base64
 from io import BytesIO, StringIO
 import requests
+import os
 
 def get_csv_from_onedrive(shared_link):
     # Convert the sharing link to a direct download link
@@ -25,22 +26,42 @@ def generate_experiment_status_plot(onedrive_link, output_html_path):
     csv_content = get_csv_from_onedrive(onedrive_link)
     
     # Read the CSV file
-    df = pd.read_csv(csv_content, parse_dates=['Date'])
+    df = pd.read_csv(csv_content)
+
+    # Print column names and first few rows for debugging
+    print("Column names:", df.columns.tolist())
+    print("\nFirst few rows of the dataframe:")
+    print(df.head())
+
+    # Check if 'Date' column exists, if not, try to identify a suitable date column
+    date_column = 'Date' if 'Date' in df.columns else df.filter(like='date').columns[0] if len(df.filter(like='date').columns) > 0 else None
+
+    if date_column is None:
+        raise ValueError("Could not find a suitable date column in the CSV file.")
+
+    # Parse the date column
+    df[date_column] = pd.to_datetime(df[date_column])
 
     # Sort the dataframe by date
-    df = df.sort_values('Date')
+    df = df.sort_values(date_column)
 
-    # Create a status column that combines CoE, FL, and VR status
-    df['Status'] = df.apply(lambda row: 'Offline' if 'Offline' in [row['CoE Status'], row['FL Status'], row['VR Status']]
-                            else ('Hardware Issue' if 'Hardware issue' in [row['CoE Status'], row['FL Status'], row['VR Status']]
+    # Identify status columns
+    status_columns = [col for col in df.columns if 'status' in col.lower()]
+
+    if len(status_columns) == 0:
+        raise ValueError("Could not find any status columns in the CSV file.")
+
+    # Create a status column that combines all status columns
+    df['Status'] = df.apply(lambda row: 'Offline' if 'Offline' in row[status_columns].values
+                            else ('Hardware Issue' if 'Hardware issue' in row[status_columns].values
                             else 'Working'), axis=1)
 
     # Create a daily status summary
-    daily_status = df.groupby('Date')['Status'].value_counts().unstack(fill_value=0)
+    daily_status = df.groupby(date_column)['Status'].value_counts().unstack(fill_value=0)
 
     # Calculate the total offline time
-    offline_days = daily_status[daily_status['Offline'] > 0].shape[0]
-    hardware_issue_days = daily_status[daily_status['Hardware Issue'] > 0].shape[0]
+    offline_days = daily_status[daily_status['Offline'] > 0].shape[0] if 'Offline' in daily_status.columns else 0
+    hardware_issue_days = daily_status[daily_status['Hardware Issue'] > 0].shape[0] if 'Hardware Issue' in daily_status.columns else 0
     total_offline_days = offline_days + hardware_issue_days
 
     # Set up the plot style
@@ -85,7 +106,7 @@ def generate_experiment_status_plot(onedrive_link, output_html_path):
         <h1>Experiment Status Plot</h1>
         <img src="data:image/png;base64,{plot_url}" alt="Experiment Status Plot">
         <h2>Summary</h2>
-        <p>Date Range: {df['Date'].min().date()} to {df['Date'].max().date()}</p>
+        <p>Date Range: {df[date_column].min().date()} to {df[date_column].max().date()}</p>
         <p>Total Offline Days: {total_offline_days}</p>
         <ul>
             <li>Offline: {offline_days}</li>
@@ -102,6 +123,13 @@ def generate_experiment_status_plot(onedrive_link, output_html_path):
     print(f"HTML file generated: {output_html_path}")
 
 # Usage
-onedrive_link = 'https://iiitaphyd-my.sharepoint.com/:x:/g/personal/nagesh_walchatwar_research_iiit_ac_in/EW_It61sJv1BsvrE4tyEDQgBaT_TMS0wOAmWS03D6g-o3A?e=B450nl'
+onedrive_link = os.environ.get('ONEDRIVE_LINK')
 output_html_path = 'experiment_plots.html'
-generate_experiment_status_plot(onedrive_link, output_html_path)
+
+try:
+    generate_experiment_status_plot(onedrive_link, output_html_path)
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+    # You might want to create a simple HTML file with the error message
+    with open(output_html_path, 'w') as f:
+        f.write(f"<html><body><h1>Error</h1><p>{str(e)}</p></body></html>")
