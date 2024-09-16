@@ -1,0 +1,36 @@
+name: Generate Experiment Plot
+
+on:
+  schedule:
+    # - cron: '0 0 * * *'  # Run daily at midnight UTC
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  generate_plot:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas matplotlib seaborn requests
+    
+    - name: Generate plot
+      run: |
+        python experiment_plot.py
+      env:
+        ONEDRIVE_LINK: ${{ secrets.ONEDRIVE_LINK }}
+    
+    - name: Commit and push if changed
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+        git add experiment_plots.html
+        git commit -m "Update experiment plot" || exit 0
+        git push
